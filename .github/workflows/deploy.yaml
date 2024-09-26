@@ -1,4 +1,4 @@
-name: CI/CD for React App
+name: CI/CD for REACT App
 
 on:
   push:
@@ -6,31 +6,29 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+    content: write
 
-jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
+jobs: 
+    build_and_deploy:
+      runs-on: ubuntu-latest
+    
+      steps:
+        - name: checkout repository
+          uses: action/checkout@v3
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+        -name: Setup Node.js
+        uses: action/setup-node@v3
+          with:
+            node-version: 18
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+        -name: Install dependencies 
+          run: npm install
 
-      - name: Install dependencies
-        run: npm install
+        -name: Build project
+          run: npm run build
 
-      - name: Build Project
-        run: npm run build
-        env:
-          REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.0
-        with:
-          branch: gh-pages
-          folder: build
+        -name: Deploy to github pages
+         uses: JamesIves/github-pages-deploy-action@4.1.0
+         with:
+            branch: gh-pages
+            folder: build  
